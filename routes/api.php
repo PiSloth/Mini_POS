@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Config\CategoryController;
+use App\Http\Controllers\Api\Config\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,4 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware([])->group(function () {
     Route::get('categories', CategoryController::class)->name('api.category');
+    Route::get('products', ProductController::class)->name('api.product');
 });

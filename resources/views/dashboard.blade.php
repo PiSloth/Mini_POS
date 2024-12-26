@@ -14,5 +14,4 @@
             </div>
         </div>
     </div>
-    <x-wui-input label="Nice to meet you" />
 </x-app-layout>

@@ -4,6 +4,7 @@ use App\Livewire\Config\ProductSetting\Branch;
 use App\Livewire\Config\ProductSetting\Category;
 use App\Livewire\Config\ProductSetting\Product;
 use App\Livewire\Config\ProductSetting\SubCategory;
+use App\Livewire\Sale\SaleInvoice;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,6 +25,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('config/category', Category::class)->name('category');
     Route::get('config/sub-category', SubCategory::class)->name('sub-category');
     Route::get('config/product', Product::class)->name('product');
+    Route::get('sale/invoice', SaleInvoice::class)->name('invoice');
 });
 
 Route::view('dashboard', 'dashboard')
