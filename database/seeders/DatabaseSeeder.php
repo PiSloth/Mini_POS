@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,9 +15,22 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        \App\Models\User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'admin@nexgen.com',
+        // \App\Models\User::factory()->create([
+        //     'name' => 'Admin',
+        //     'email' => 'admin@nexgen.com',
+        // ]);
+
+        DB::table('invoice_statuses')->insert([
+            'name' => 'New'
+        ]);
+        DB::table('invoice_statuses')->insert([
+            'name' => 'COD'
+        ]);
+        DB::table('invoice_statuses')->insert([
+            'name' => 'Paid'
+        ]);
+        DB::table('invoice_statuses')->insert([
+            'name' => 'Canceled'
         ]);
     }
 }

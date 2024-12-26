@@ -3,28 +3,123 @@
 namespace App\Livewire\Sale;
 
 use App\Models\BranchProduct;
+use App\Models\Customer;
+use App\Models\Invoice;
+use Carbon\Carbon;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use WireUi\Traits\WireUiActions;
 
 class SaleInvoice extends Component
 {
+    use WireUiActions;
     public $search;
     public $selected;
     public $cart = [];
+    //customer
+    public $name;
+    public $phone;
+    public $address;
+    public $customer_id;
+    public $customer = [];
 
-    public function cart($key, $name, $code, $price)
+    public function addToCart($key, $name, $code, $price): void
     {
-        dd(
-            "Hello"
-        );
-        $this->cart[] = [
-            'key' => $key,
-            '$name' => $name,
-            '$code' => $code,
-            'price' => $price
-        ];
-        dd($this->cart);
+        // dd("Hello");
+        if (!isset($this->cart[$key])) {
+            $this->cart[$key] = [];
+
+            $this->cart[$key] = [
+                'key' => $key,
+                'name' => $name,
+                'code' => $code,
+                'price' => $price,
+                'quantity' => 1
+            ];
+        } else {
+            $this->cart[$key]['quantity'] += 1;
+            $this->cart[$key]['price'] += $price;
+        }
+        // dd($this->cart);
+    }
+
+    //create Voucher
+    public function createVoucher(): void
+    {
+        if (count($this->cart) == 0 || count($this->customer) == 0) {
+            $this->dialog()->show([
+                'icon' => 'error',
+                'title' => 'Failed',
+                'description' => 'Customer data or Product data not found.'
+            ]);
+            return;
+        }
+        DB::transaction(function () {
+            $total = 0;
+            foreach ($this->cart as $item) {
+                $total += $item['price'];
+            }
+            Invoice::create([
+                'number' => Carbon::now()->format('mjyHi'),
+                'customer_id' => $this->customer_id,
+                'invoice_status_id' => 1, //new
+                'total' => $total,
+            ]);
+        });
+
+        $this->reset('cart', 'customer');
+        $this->notification()->send([
+            'icon' => 'success',
+            'title' => 'Created',
+            'description' => "Voucher was successfully created."
+        ]);
+    }
+
+    public function createCustomer(): void
+    {
+
+        if (in_array($this->customer_id, array_column($this->customer, 'id'))) {
+            // dd('true');
+            return;
+            $this->dispatch('closeModal', 'newModal');
+        }
+
+        if ($this->customer_id) {
+            $customerData = Customer::find($this->customer_id);
+
+            $this->customer[] = [
+                'id' => $this->customer_id,
+                'name' => $customerData->name,
+                'phone' => $customerData->phone,
+                'address' => $customerData->address,
+            ];
+        } else {
+            $validated = $this->validate([
+                'name' => 'required',
+                'phone' => 'numeric|required',
+                'address' => 'nullable|string',
+            ]);
+
+            $createdCustomer = Customer::create($validated);
+
+            $this->customer_id = $createdCustomer;
+
+            $this->notification()->send([
+                'icon' => 'success',
+                'title' => 'Created!',
+                'description' => 'Customer added successfully'
+            ]);
+
+            $this->customer[] = [
+                'id' => $createdCustomer->id,
+                'name' => $this->name,
+                'phone' => $this->phone,
+                'address' => $this->address,
+            ];
+        }
+
+        $this->dispatch('closeModal', 'newModal');
     }
 
     public function render()
@@ -48,10 +143,12 @@ class SaleInvoice extends Component
             )
             ->get();
 
-        // if ($this->search) {
+        // dd(Carbon::now()->format('mjyHi'));
+        // if ($this->customer) {
 
-        //     dd($products);
+        //     dd($this->customer);
         // }
+
 
         return view('livewire.sale.sale-invoice', [
             'products' => $products,
