@@ -27,5 +27,5 @@ Route::middleware([])->group(function () {
     Route::get('categories', CategoryController::class)->name('api.category');
     Route::get('products', ProductController::class)->name('api.product');
     Route::get('contacts', ContactController::class)->name('api.contact');
-    Route::get('contacts', ItemLocationController::class)->name('api.item-location');
+    Route::get('location', ItemLocationController::class)->name('api.item-location');
 });
