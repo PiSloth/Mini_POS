@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('price');
             $table->integer('discount_price')->nullable();
             $table->boolean('is_on_sale')->default(false); // if true discount price active
-            $table->integer('stock_qty')->default(0);
+            $table->integer('quantity')->default(0);
             $table->timestamps();
         });
     }
