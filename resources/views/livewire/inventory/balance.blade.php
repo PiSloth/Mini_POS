@@ -1,4 +1,18 @@
 <div>
+    <div class="flex h-16 gap-2 p-3 mb-2 bg-white dark:text-white">
+        <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+            {{ __('Stock လက်ကျန်စာရင်း') }}
+        </h2>
+        <div class="text-sm">
+            <select wire:model.live='branch_id' required id="branch_name"
+                class="text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option value="" disabled>Shop</option>
+                @foreach ($branches as $branch)
+                    <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
     <table class="w-full mt-3 text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -103,49 +117,51 @@
 
     {{-- Transfer History  --}}
     <x-wui-modal-card title="ပစ္စည်းအဝင်/အထွက် မှတ်တမ်း" name="transferHistoryModal">
-        <table class="w-full mt-3 text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        Remark
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Quantity
-                    </th>
-
-                    <th scope="col" class="px-6 py-3">
-                        Stock in/out
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        တာဝန်ခံ
-                    </th>
-
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($histories as $item)
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <th scope="row"
-                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ $item->remark }}
+        <div class="overflow-x-scroll ">
+            <table class="w-full mt-3 text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Remark
                         </th>
-                        <td class="px-6 py-4">
-                            {{ $item->quantity }}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ $item->quantity ? 'အဝင်' : 'အထွက်' }}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ $item->user->name }}
-                        </td>
+                        <th scope="col" class="px-6 py-3">
+                            Quantity
+                        </th>
+
+                        <th scope="col" class="px-6 py-3">
+                            Stock in/out
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            တာဝန်ခံ
+                        </th>
+
                     </tr>
-                @empty
-                    <tr class="py-4">
-                        <td>There's no records yet!</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @forelse ($histories as $item)
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <th scope="row"
+                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {{ $item->remark }}
+                            </th>
+                            <td class="px-6 py-4">
+                                {{ $item->quantity }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ $item->quantity ? 'အဝင်' : 'အထွက်' }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ $item->user->name }}
+                            </td>
+                        </tr>
+                    @empty
+                        <tr class="py-4">
+                            <td>There's no records yet!</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
 
         <x-slot name="footer" class="flex justify-between gap-x-4">
             <div class="flex gap-x-4">

@@ -37,11 +37,26 @@ class Product extends Component
     // public $up_product_image_id;s
     public $up_product_id;
 
+
     //edit
     private $edit_product_id;
     private $edit_branch_id;
     private $edit_price_id;
     private $edit_img_id;
+
+    //branch history
+    public $located_branches = [];
+    public $history_look_product;
+
+    public function mount()
+    {
+        $array = [
+            1 => "Nice",
+            2 => 'Adidas'
+        ];
+
+        // dd(isset($array[1]));
+    }
 
     public function create()
     {
@@ -99,8 +114,6 @@ class Product extends Component
     }
 
 
-
-
     //Update
     public function update()
     {
@@ -156,21 +169,77 @@ class Product extends Component
         ]);
     }
 
-    //Delete
+    //Branch history
+
+    public function branchHistories($id)
+    {
+        $this->history_look_product = $id;
+        $this->located_branches = [];
+        $query = BranchProduct::whereProductId($id)->get();
+        // dd($query);
+        $this->up_product_image = $query->first()->product->productImage->image;
+
+        foreach ($query as $item) {
+            $this->located_branches[$item->branch_id] =  $item->branch->name;
+        }
+
+        $this->dispatch('openModal', 'newLocateModal');
+    }
+
+
+    //locate to a new branch
+    public function newBranchLocate()
+    {
+        $this->validate([
+            'branch_id' => 'required',
+            'price' => 'required',
+        ]);
+
+        // $selected_new_branch = Branch::find($this->branch_id)->name;
+        // dd($this->located_branches);
+
+        // dd(isset($this->located_branches[$selected_new_branch]));
+
+        if (isset($this->located_branches[$this->branch_id])) {
+            $this->dialog()->show([
+                'icon' => 'error',
+                'title' => 'Failed',
+                'description' => 'This item is already located  to this branch.'
+            ]);
+            return;
+        }
+
+        BranchProduct::create([
+            'branch_id' => $this->branch_id,
+            'product_id' => $this->history_look_product,
+            'price' => $this->price,
+        ]);
+
+        $this->reset('branch_id', 'price', 'history_look_product');
+        $this->dispatch('closeModal', 'newLocateModal');
+
+        $this->dialog()->show([
+            'icon' => 'success',
+            'title' => 'Located',
+            'description' => 'This item located to a new branch.'
+        ]);
+    }
 
     public function render()
     {
-        $products = BranchProduct::all();
+        $products = ModelsProduct::all();
+
+        // dd($products);
 
         if ($this->edit_id) {
-            $edit_item = BranchProduct::find($this->edit_id);
+            $edit_item = ModelsProduct::find($this->edit_id);
 
-            $this->up_branch_id = $edit_item->branch_id;
-            $this->up_sub_category_id = $edit_item->product->sub_category_id;
-            $this->up_code = $edit_item->product->code;
-            $this->up_name = $edit_item->product->name;
-            $this->up_price = $edit_item->price;
-            $this->up_product_image = $edit_item->product->productImage->image;
+            // $this->up_branch_id = $edit_item->branch_id;
+            // $this->up_price = $edit_item->price;
+            $this->up_sub_category_id = $edit_item->sub_category_id;
+            $this->up_name = $edit_item->name;
+            $this->up_code = $edit_item->code;
+            $this->up_product_image = $edit_item->productImage->image;
             $this->dispatch('openModal', 'editModal');
 
             // dump($this->up_product_image);

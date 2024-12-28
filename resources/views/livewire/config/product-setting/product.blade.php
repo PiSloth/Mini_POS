@@ -1,7 +1,7 @@
 <div>
     <div class="flex h-12 gap-2 p-3 mb-2 bg-white dark:text-white">
         <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-            {{ __('Sub Category') }}
+            {{ __('Product') }}
         </h2>
         <x-wui-button label="New" @click="$openModal('newModal')" />
         @if ($edit_id)
@@ -22,9 +22,9 @@
                     <th scope="col" class="px-6 py-3">
                         Category
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    {{-- <th scope="col" class="px-6 py-3">
                         Price
-                    </th>
+                    </th> --}}
                     <th scope="col" class="px-6 py-3">
                         Description
                     </th>
@@ -39,22 +39,26 @@
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <th scope="row"
                             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ $data->product->name }}
+                            {{ $data->name }}
                         </th>
                         <td class="px-6 py-4">
-                            {{ $data->product->code }}
+                            {{ $data->code }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $data->product->subCategory->name }}
+                            {{ $data->subCategory->category->name }} / {{ $data->subCategory->name }}
                         </td>
-                        <td class="px-6 py-4">
+                        {{-- <td class="px-6 py-4">
                             {{ $data->price }}
-                        </td>
+                        </td> --}}
                         <td class="px-6 py-4">
                             <x-wui-button label="edit" wire:click='edit({{ $data->id }})' />
-                            <x-danger-button x-on:click.prevent="$dispatch('open-modal', 'confirm-category-delete')"
+
+                            <x-primary-button wire:click='branchHistories({{ $data->id }})'
+                                @click="$openModal('newLocateModal')">Locate</x-primary-button>
+
+                            {{-- <x-danger-button x-on:click.prevent="$dispatch('open-modal', 'confirm-category-delete')"
                                 wire:click='setDeleteId({{ $data->id }})'>
-                                delete</x-danger-button>
+                                delete</x-danger-button> --}}
                         </td>
                     </tr>
                 @empty
@@ -87,7 +91,7 @@
                     }
                 }
             },
-        
+
             removeFile() {
                 this.preview = null,
                     this.show = true
@@ -164,6 +168,89 @@
         </form>
     </x-wui-modal-card>
 
+    {{-- New modal  --}}
+    <x-wui-modal-card title="Branch Located" name="newLocateModal">
+        <form x-data="{
+            show: true,
+            preview: null,
+            name: null,
+            files: [],
+            handleFile(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => this.preview = e.target.result
+                        reader.readAsDataURL(file);
+                        this.show = false
+                    } else {
+                        alert('Please select a valid image file.');
+                    }
+                }
+            },
+
+            removeFile() {
+                this.preview = null,
+                    this.show = true
+            },
+        }">
+            <div class="mb-3">
+                <span class="text-gray-400 text-lg">ရောက်ရှိပြီး ဆိုင်ခွဲများ</span>
+                <ul class="mt-3">
+                    @foreach ($located_branches as $branch)
+                        <li class="text-blue-400">
+                            # {{ $branch }}
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+
+            <div class="col-span-1 sm:col-span-2 my-2">
+                <img src='{{ asset('storage/' . $up_product_image) }}' alt="product name"
+                    class="object-cover w-48 h-48 rounded-lg" />
+                <div class="relative group">
+                    <!-- Image Box -->
+                    {{-- @dump($up_product_image) --}}
+
+                    <!-- Close Button -->
+                    {{-- <button @click="removeFile"
+                        class="absolute p-1 text-white transition bg-red-500 rounded-full opacity-0 top-2 right-2 group-hover:opacity-100"
+                        title="Remove image">
+                        &times;
+                    </button> --}}
+                </div>
+            </div>
+
+            <span class="text-gray-400 text-lg">ပစ္စည်းထားမည့် ဆိုင်ခွဲအသစ်</span>
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 mt-4">
+                <div>
+                    <label for="branch_name">ဆိုင်ခွဲ အမည်</label>
+                    <div class="mt-1">
+                        <select wire:model='branch_id' required id="branch_name"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option value="" disabled>Shop</option>
+                            @foreach ($branches as $branch)
+                                <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <x-wui-currency label="Price" thousands="," prefix="MMK" wire:model='price' />
+            </div>
+
+            <x-slot name="footer" class="flex justify-between gap-x-4">
+                <x-wui-button flat negative label="Delete" x-on:click="$closeModal('newLocateModal')" />
+
+                <div class="flex gap-x-4">
+                    <x-wui-button flat label="Cancel" x-on:click="close" />
+
+                    <x-primary-button wire:click='newBranchLocate'>save</x-primary-button>
+
+                </div>
+            </x-slot>
+        </form>
+    </x-wui-modal-card>
+
     {{-- edit modal  --}}
     <x-wui-modal-card title="Edit Product" name="editModal">
         <form x-data="{
@@ -184,21 +271,13 @@
                     }
                 }
             },
-        
+
             removeFile() {
                 this.preview = null,
                     this.show = true
             },
         }">
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-
-                <select wire:model='up_branch_id'
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <option value="" disabled>Shop</option>
-                    @foreach ($branches as $branch)
-                        <option value="{{ $branch->id }}">{{ $branch->name }}</option>
-                    @endforeach
-                </select>
 
                 <div class="col-span-1 sm:col-span-2">
                     <x-wui-select wire:model.live='up_sub_category_id' label="Main Group" placeholder="search"

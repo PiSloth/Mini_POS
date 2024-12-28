@@ -9,11 +9,13 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Livewire\WithPagination;
 use WireUi\Traits\WireUiActions;
 
 class SaleInvoice extends Component
 {
     use WireUiActions;
+    use WithPagination;
     public $search;
     public $selected;
     public $cart = [];
@@ -141,7 +143,7 @@ class SaleInvoice extends Component
                 })
 
             )
-            ->get();
+            ->paginate(4);
 
         // dd(Carbon::now()->format('mjyHi'));
         // if ($this->customer) {

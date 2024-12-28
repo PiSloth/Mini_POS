@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Inventory;
 
+use App\Models\Branch;
 use App\Models\BranchProduct;
 use App\Models\BranchProductLocation;
 use App\Models\Customer;
@@ -17,6 +18,10 @@ class Balance extends Component
     public $remark;
     public $quantity;
     public $item_location_id;
+    public $branch_id = 1;
+
+
+    // public function mount(){}
 
     public function initialStockId($id)
     {
@@ -121,9 +126,13 @@ class Balance extends Component
 
     public function render()
     {
+        $branch_products = BranchProduct::where('branch_id', $this->branch_id)
+            ->get();
+
         return view('livewire.inventory.balance', [
-            'stocks' => BranchProduct::all(),
+            'stocks' => $branch_products,
             'histories' => StockAdjustmentTemp::whereBranchProductId($this->branch_product_id)->get(),
+            'branches' => Branch::all(),
         ]);
     }
 }
