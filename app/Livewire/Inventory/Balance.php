@@ -4,6 +4,7 @@ namespace App\Livewire\Inventory;
 
 use App\Models\BranchProduct;
 use App\Models\BranchProductLocation;
+use App\Models\Customer;
 use App\Models\StockAdjustmentTemp;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -115,6 +116,8 @@ class Balance extends Component
             'description' => 'Item successfully located.'
         ]);
     }
+
+
 
     public function render()
     {

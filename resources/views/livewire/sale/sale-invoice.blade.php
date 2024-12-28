@@ -1,4 +1,4 @@
-<div class="grid grid-cols-2 gap-4">
+<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
     <div>
         <x-wui-input wire:model.live='search' label="Choose a Product"
             placeholder="Find a Product with [Category] or [Code] or [Name]" />

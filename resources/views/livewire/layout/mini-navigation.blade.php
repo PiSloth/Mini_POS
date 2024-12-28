@@ -238,6 +238,90 @@ $logout = function (Logout $logout) {
             </x-responsive-nav-link>
         </div>
 
+
+        <!-- Responsive Config Options -->
+        <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
+            <div class="px-4">
+                <div class="text-base font-medium text-teal-600 dark:text-gray-200" x-data="{ name: 'Config' }"
+                    x-text="name" x-on:profile-updated.window="name = $event.detail.name"></div>
+                <div class="text-sm font-medium text-gray-500">Conguration of your business</div>
+            </div>
+
+            <div class="mt-3 space-y-1">
+                <x-responsive-nav-link :href="route('branch')" wire:navigate>
+                    {{ __('Branch') }}
+                </x-responsive-nav-link>
+
+
+                <x-responsive-nav-link :href="route('category')" wire:navigate>
+                    {{ __('Category') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('sub-category')" wire:navigate>
+                    {{ __('Sub Category') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('product')" wire:navigate>
+                    {{ __('Product') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('item-location')" wire:navigate>
+                    {{ __('Item Location') }}
+                </x-responsive-nav-link>
+
+            </div>
+        </div>
+
+        <!-- Responsive Inventory Options -->
+        <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
+            <div class="px-4">
+                <div class="text-base font-medium text-teal-600 dark:text-gray-200" x-data="{ name: 'Inventory' }"
+                    x-text="name" x-on:profile-updated.window="name = $event.detail.name"></div>
+                <div class="text-sm font-medium text-gray-500">Keep your inventory healthy</div>
+            </div>
+
+            <div class="mt-3 space-y-1">
+                <x-responsive-nav-link :href="route('stock-balance')" wire:navigate>
+                    {{ __('Balance') }}
+                </x-responsive-nav-link>
+            </div>
+        </div>
+
+        <!-- Responsive Sales Options -->
+        <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
+            <div class="px-4">
+                <div class="text-base font-medium text-teal-600 dark:text-gray-200" x-data="{ name: 'Sales' }"
+                    x-text="name" x-on:profile-updated.window="name = $event.detail.name"></div>
+                <div class="text-sm font-medium text-gray-500">Make more revenue everyday</div>
+            </div>
+
+            <div class="mt-3 space-y-1">
+                <x-responsive-nav-link :href="route('invoice')" wire:navigate>
+                    {{ __('Invoice') }}
+                </x-responsive-nav-link>
+            </div>
+
+            <div class="mt-3 space-y-1">
+                <x-responsive-nav-link :href="route('daily-invoice')" wire:navigate>
+                    {{ __('Daily Sales') }}
+                </x-responsive-nav-link>
+            </div>
+        </div>
+        <!-- Responsive Sales Options -->
+        <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
+            <div class="px-4">
+                <div class="text-base font-medium text-teal-600 dark:text-gray-200" x-data="{ name: 'CRM' }"
+                    x-text="name" x-on:profile-updated.window="name = $event.detail.name"></div>
+                <div class="text-sm font-medium text-gray-500">Relationship management for customer retained</div>
+            </div>
+
+            <div class="mt-3 space-y-1">
+                <x-responsive-nav-link :href="route('contact')" wire:navigate>
+                    {{ __('Contacts') }}
+                </x-responsive-nav-link>
+            </div>
+        </div>
+
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
             <div class="px-4">
@@ -259,5 +343,6 @@ $logout = function (Logout $logout) {
                 </button>
             </div>
         </div>
+
     </div>
 </nav>

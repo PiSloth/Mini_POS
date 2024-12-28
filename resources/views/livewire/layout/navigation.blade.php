@@ -30,7 +30,7 @@ $logout = function (Logout $logout) {
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('sub-category')" :active="request()->routeIs('sub-category')" wire:navigate>
+                    <x-nav-link :href="route('sub-category')" :active="request()->routeIs('product')">
                         {{ __('NexGen') }}
                     </x-nav-link>
                 </div>
