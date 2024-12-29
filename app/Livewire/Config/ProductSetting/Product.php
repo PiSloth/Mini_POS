@@ -102,6 +102,18 @@ class Product extends Component
     public function edit($id)
     {
         $this->edit_id = $id;
+
+        $edit_item = ModelsProduct::find($id);
+
+        // $this->up_branch_id = $edit_item->branch_id;
+        // $this->up_price = $edit_item->price;
+        $this->up_sub_category_id = $edit_item->sub_category_id;
+        $this->up_name = $edit_item->name;
+        $this->up_code = $edit_item->code;
+        $this->up_description = $edit_item->description;
+        $this->up_product_image = $edit_item->productImage->image;
+
+        $this->dispatch('openModal', 'editModal');
     }
 
 
@@ -216,31 +228,10 @@ class Product extends Component
     {
         $products = ModelsProduct::all();
 
-        // dd($products);
-
-        if ($this->edit_id) {
-            $edit_item = ModelsProduct::find($this->edit_id);
-
-            // $this->up_branch_id = $edit_item->branch_id;
-            // $this->up_price = $edit_item->price;
-            $this->up_sub_category_id = $edit_item->sub_category_id;
-            $this->up_name = $edit_item->name;
-            $this->up_code = $edit_item->code;
-            $this->up_product_image = $edit_item->productImage->image;
-            $this->dispatch('openModal', 'editModal');
-
-            // dump($this->up_product_image);
-        } else {
-            $edit_item = [
-                'product_id' => '',
-                'branch_id' => '',
-            ];
-        }
-
         return view('livewire.config.product-setting.product', [
             'products' => $products,
             'branches' => Branch::all(),
-            'editItem' => $edit_item,
+            // 'editItem' => $edit_item,
         ]);
     }
 }
