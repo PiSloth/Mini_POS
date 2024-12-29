@@ -34,7 +34,7 @@ class Product extends Component
     public $up_code;
     public $up_description;
     public $up_product_image;
-    // public $up_product_image_id;s
+    public $up_product_image_id;
     public $up_product_id;
 
 
@@ -48,15 +48,6 @@ class Product extends Component
     public $located_branches = [];
     public $history_look_product;
 
-    public function mount()
-    {
-        $array = [
-            1 => "Nice",
-            2 => 'Adidas'
-        ];
-
-        // dd(isset($array[1]));
-    }
 
     public function create()
     {
@@ -126,10 +117,10 @@ class Product extends Component
             'up_description' => 'nullable',
         ]);
 
-        $this->validate([
-            'up_branch_id' => 'required',
-            'up_price' => 'required',
-        ]);
+        // $this->validate([
+        //     'up_branch_id' => 'required',
+        //     'up_price' => 'required',
+        // ]);
 
         // $this->validate([
         //     'up_product_image' => 'required|sometimes|nullable',
@@ -138,6 +129,7 @@ class Product extends Component
         // ---- Use Try Catch -----
 
         DB::transaction(function () {
+
             $pId = $this->up_product_id;
             $bpId = $this->edit_id;
             $imgId = $this->up_product_image_id;
@@ -149,10 +141,9 @@ class Product extends Component
                 'description' => $this->up_description,
             ]);
 
-            BranchProduct::where('id', $bpId)->update([
-                'price' => $this->up_price,
-            ]);
-
+            // BranchProduct::where('id', $bpId)->update([
+            //     'price' => $this->up_price,
+            // ]);
             // ProductImage::whereProductId($imgId)->update([
             //     'image' => $this->up_product_image,
             // ]);
@@ -195,10 +186,6 @@ class Product extends Component
             'price' => 'required',
         ]);
 
-        // $selected_new_branch = Branch::find($this->branch_id)->name;
-        // dd($this->located_branches);
-
-        // dd(isset($this->located_branches[$selected_new_branch]));
 
         if (isset($this->located_branches[$this->branch_id])) {
             $this->dialog()->show([

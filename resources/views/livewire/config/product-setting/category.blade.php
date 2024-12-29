@@ -37,6 +37,14 @@
                         <td class="px-6 py-4">
                             {{ $category->description }}
                         </td>
+                        <td class="px-6 py-4">
+                            <x-wui-button label="edit" wire:click='edit({{ $category->id }})'
+                                @click="$openModal('editModal')" />
+
+                            <x-danger-button x-on:click.prevent="$dispatch('open-modal', 'confirm-category-delete')"
+                                wire:click='setDeleteId({{ $category->id }})'>
+                                delete</x-danger-button>
+                        </td>
                     </tr>
                 @empty
                     <tr>
@@ -72,9 +80,59 @@
             </div>
         </x-slot>
     </x-wui-modal-card>
+
+    {{-- Edit modal  --}}
+    <x-wui-modal-card title="New Category" name="editModal">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <x-wui-input label="Name" wire:model='up_name' placeholder="eg. Cover" />
+
+            <x-wui-input label="Code" wire:model='up_code' placeholder=" eg. C" />
+
+            <div class="col-span-1 sm:col-span-2">
+                <x-wui-input label="Description" wire:model='up_description' placeholder="description" />
+            </div>
+        </div>
+
+        <x-slot name="footer" class="flex justify-between gap-x-4">
+            <x-wui-button flat negative label="Delete" x-on:click="$closeModal('editModal')" />
+
+            <div class="flex gap-x-4">
+                <x-wui-button flat label="Cancel" x-on:click="close" />
+
+                <x-wui-button primary label="Save" wire:click="updateCategory" />
+            </div>
+        </x-slot>
+    </x-wui-modal-card>
+
+    {{-- Delete confirm modal --}}
+    <x-modal name="confirm-category-delete" :show="$errors->isNotEmpty()" focusable>
+        <form wire:submit="delete" class="p-6">
+
+            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                {{ __('Are you sure you want to delete  Category?') }}
+            </h2>
+
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                {{ __('Once your category is deleted, all of its porducts and data will be permanently deleted.') }}
+            </p>
+
+            <div class="flex justify-end mt-6">
+                <x-secondary-button x-on:click="$dispatch('close')">
+                    {{ __('Cancel') }}
+                </x-secondary-button>
+
+                <x-danger-button class="ms-3">
+                    {{ __('Delete Sub-category') }}
+                </x-danger-button>
+            </div>
+        </form>
+    </x-modal>
 </div>
 <script>
     Livewire.on('closeModal', (name) => {
         $closeModal(name);
+    });
+    Livewire.on('openModal', (name) => {
+        $openModal(name);
     });
 </script>

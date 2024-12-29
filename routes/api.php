@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Config\CategoryController;
 use App\Http\Controllers\Api\Config\ItemLocationController;
 use App\Http\Controllers\Api\Config\ProductController;
+use App\Http\Controllers\Api\Config\SubCategoryController;
 use App\Http\Controllers\Api\Crm\ContactController;
 use App\Models\ItemLocation;
 use Illuminate\Http\Request;
@@ -25,6 +26,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware([])->group(function () {
     Route::get('categories', CategoryController::class)->name('api.category');
+    Route::get('sub-categories', SubCategoryController::class)->name('api.sub-category');
     Route::get('products', ProductController::class)->name('api.product');
     Route::get('contacts', ContactController::class)->name('api.contact');
     Route::get('location', ItemLocationController::class)->name('api.item-location');

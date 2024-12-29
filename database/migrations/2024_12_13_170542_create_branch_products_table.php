@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('branch_products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('product_id')->constrained();
             $table->foreignId('branch_id')->constrained();
             $table->integer('price');
             $table->integer('discount_price')->nullable();

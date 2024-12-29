@@ -47,9 +47,9 @@
                         <td class="px-6 py-4">
                             {{ $data->subCategory->category->name }} / {{ $data->subCategory->name }}
                         </td>
-                        {{-- <td class="px-6 py-4">
-                            {{ $data->price }}
-                        </td> --}}
+                        <td class="px-6 py-4">
+                            {{ $data->description }}
+                        </td>
                         <td class="px-6 py-4">
                             <x-wui-button label="edit" wire:click='edit({{ $data->id }})' />
 
@@ -91,7 +91,7 @@
                     }
                 }
             },
-
+        
             removeFile() {
                 this.preview = null,
                     this.show = true
@@ -108,8 +108,8 @@
                 </select>
 
                 <div class="col-span-1 sm:col-span-2">
-                    <x-wui-select wire:model='sub_category_id' label="Main Group" placeholder="search" :async-data="route('api.category')"
-                        option-label="category" option-value="id" />
+                    <x-wui-select wire:model='sub_category_id' label="Main Group" placeholder="search" :async-data="route('api.sub-category')"
+                        option-label="sub_category" option-value="id" />
                 </div>
 
                 <x-wui-input label="Name" wire:model='name' placeholder="eg. Cover" />
@@ -168,7 +168,7 @@
         </form>
     </x-wui-modal-card>
 
-    {{-- New modal  --}}
+    {{-- add new locate branch  --}}
     <x-wui-modal-card title="Branch Located" name="newLocateModal">
         <form x-data="{
             show: true,
@@ -188,14 +188,14 @@
                     }
                 }
             },
-
+        
             removeFile() {
                 this.preview = null,
                     this.show = true
             },
         }">
             <div class="mb-3">
-                <span class="text-gray-400 text-lg">ရောက်ရှိပြီး ဆိုင်ခွဲများ</span>
+                <span class="text-lg text-gray-400">ရောက်ရှိပြီး ဆိုင်ခွဲများ</span>
                 <ul class="mt-3">
                     @foreach ($located_branches as $branch)
                         <li class="text-blue-400">
@@ -205,7 +205,7 @@
                 </ul>
             </div>
 
-            <div class="col-span-1 sm:col-span-2 my-2">
+            <div class="col-span-1 my-2 sm:col-span-2">
                 <img src='{{ asset('storage/' . $up_product_image) }}' alt="product name"
                     class="object-cover w-48 h-48 rounded-lg" />
                 <div class="relative group">
@@ -221,8 +221,8 @@
                 </div>
             </div>
 
-            <span class="text-gray-400 text-lg">ပစ္စည်းထားမည့် ဆိုင်ခွဲအသစ်</span>
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 mt-4">
+            <span class="text-lg text-gray-400">ပစ္စည်းထားမည့် ဆိုင်ခွဲအသစ်</span>
+            <div class="grid grid-cols-1 gap-4 mt-4 sm:grid-cols-2">
                 <div>
                     <label for="branch_name">ဆိုင်ခွဲ အမည်</label>
                     <div class="mt-1">
@@ -271,7 +271,7 @@
                     }
                 }
             },
-
+        
             removeFile() {
                 this.preview = null,
                     this.show = true
@@ -281,7 +281,7 @@
 
                 <div class="col-span-1 sm:col-span-2">
                     <x-wui-select wire:model.live='up_sub_category_id' label="Main Group" placeholder="search"
-                        :async-data="route('api.category')" option-label="category" option-value="id" />
+                        :async-data="route('api.sub-category')" option-label="sub_category" option-value="id" />
                 </div>
 
                 <x-wui-input label="Name" wire:model.live='up_name' placeholder="eg. Cover" />
@@ -291,15 +291,11 @@
                 <div class="col-span-1 sm:col-span-2">
                     <x-wui-input label="Description" wire:model.live='up_description' placeholder="description" />
                 </div>
-
-                <x-wui-currency label="Price" thousands="," prefix="MMK" wire:model.live='up_price' />
-
-
-
                 <div class="col-span-1 sm:col-span-2">
                     <img src='{{ asset('storage/' . $up_product_image) }}' alt="product name"
                         class="object-cover w-48 h-48 rounded-lg" />
                     <div class="relative group">
+
                         <!-- Image Box -->
                         {{-- @dump($up_product_image) --}}
 

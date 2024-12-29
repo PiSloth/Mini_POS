@@ -45,7 +45,7 @@
                         </td>
                         <td class="px-6 py-4">
                             <x-wui-button label="edit" wire:click='edit({{ $category->id }})' />
-                            <x-danger-button x-on:click.prevent="$dispatch('open-modal', 'confirm-category-delete')"
+                            <x-danger-button x-on:click.prevent="$dispatch('open-modal', 'confirm-sub_category-delete')"
                                 wire:click='setDeleteId({{ $category->id }})'>
                                 delete</x-danger-button>
                         </td>
@@ -92,7 +92,7 @@
         </x-slot>
     </x-wui-modal-card>
 
-    <x-modal name="confirm-category-delete" :show="$errors->isNotEmpty()" focusable>
+    <x-modal name="confirm-sub_category-delete" :show="$errors->isNotEmpty()" focusable>
         <form wire:submit="delete" class="p-6">
 
             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">

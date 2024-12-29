@@ -3,6 +3,7 @@
 namespace App\Livewire\Config\ProductSetting;
 
 use App\Models\Branch as ModelsBranch;
+use Exception;
 use Livewire\Component;
 use WireUi\Traits\WireUiActions;
 
@@ -81,7 +82,20 @@ class Branch extends Component
 
     public function  delete($id)
     {
-        ModelsBranch::find($id)->delete();
+
+        try {
+            ModelsBranch::find($id)->delete();
+        } catch (Exception $e) {
+            if ($e->getCode() == '23000') {
+                $this->dialog()->show([
+                    'icon' => 'error',
+                    'title' => 'Failed!',
+                    'description' => 'Can\'t delete this item coz of use in another record.'
+                ]);
+                $this->dispatch('close-modal', 'confirm-branch-delete');
+                return;
+            }
+        }
 
         $this->dispatch('closeModal', 'confirm-branch-delete');
 

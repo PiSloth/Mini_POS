@@ -4,6 +4,7 @@ namespace App\Livewire\Config\ProductSetting;
 
 use App\Models\Category;
 use App\Models\SubCategory as ModelsSubCategory;
+use Exception;
 use Livewire\Component;
 use WireUi\Traits\WireUiActions;
 
@@ -94,10 +95,23 @@ class SubCategory extends Component
     //delete item
     public function delete()
     {
-        ModelsSubCategory::find($this->deleteId)->delete();
+
+        try {
+            ModelsSubCategory::find($this->deleteId)->delete();
+        } catch (Exception $e) {
+            if ($e->getCode() == '23000') {
+                $this->dialog()->show([
+                    'icon' => 'error',
+                    'title' => 'Failed!',
+                    'description' => 'Can\'t delete this item coz of use in another record.'
+                ]);
+                $this->dispatch('close-modal', 'confirm-sub_category-delete');
+                return;
+            }
+        }
 
         $this->reset('deleteId');
-        $this->dispatch('close-modal', 'confirm-category-delete');
+        $this->dispatch('close-modal', 'confirm-sub_category-delete');
 
         $this->notification()->send([
             'title' => 'Deleted!',
