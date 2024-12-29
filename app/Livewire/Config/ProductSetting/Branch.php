@@ -15,6 +15,9 @@ class Branch extends Component
     public $edit_id;
     public $delete_id;
 
+    public $up_name;
+    public $up_address;
+
 
     public function create()
     {
@@ -39,13 +42,13 @@ class Branch extends Component
     {
         $branch = ModelsBranch::find($this->edit_id);
         $branch->update([
-            'name' => $this->name,
-            'address' => $this->address,
+            'name' => $this->up_name,
+            'address' => $this->up_address,
         ]);
 
-        $this->dispatch('closeModal', 'newModal');
+        $this->dispatch('closeModal', 'editModal');
 
-        $this->reset('name', 'address', 'edit_id');
+        $this->reset('up_name', 'up_address', 'edit_id');
         $this->notification()->send([
             'icon' => 'success',
             'title' => 'Success',
@@ -56,16 +59,17 @@ class Branch extends Component
     public function edit($id)
     {
         $query = ModelsBranch::find($id);
-        $this->name = $query->name;
-        $this->address = $query->address;
+        $this->up_name = $query->name;
+        $this->up_address = $query->address;
+
         $this->edit_id = $id;
 
-        $this->dispatch('openModal', 'newModal');
+        $this->dispatch('openModal', 'editModal');
     }
 
     public function cancleEdit()
     {
-        $this->reset('name', 'address', 'edit_id');
+        $this->reset('up_name', 'up_address', 'edit_id');
     }
 
     // Delection

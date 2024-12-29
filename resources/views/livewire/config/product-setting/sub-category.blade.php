@@ -4,9 +4,6 @@
             {{ __('Sub Category') }}
         </h2>
         <x-wui-button label="New" @click="$openModal('newModal')" />
-        @if ($editId)
-            <x-wui-button label="Cancle edit" wire:click='clearEditId' negative />
-        @endif
     </div>
 
 
@@ -23,6 +20,9 @@
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Category
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Description
                     </th>
                     <th scope="col" class="px-6 py-3 sr-only">
                         Action
@@ -44,6 +44,9 @@
                             {{ $category->category->name }}
                         </td>
                         <td class="px-6 py-4">
+                            {{ $category->description }}
+                        </td>
+                        <td class="px-6 py-4">
                             <x-wui-button label="edit" wire:click='edit({{ $category->id }})' />
                             <x-danger-button x-on:click.prevent="$dispatch('open-modal', 'confirm-sub_category-delete')"
                                 wire:click='setDeleteId({{ $category->id }})'>
@@ -61,7 +64,7 @@
     </div>
 
     {{-- New modal  --}}
-    <x-wui-modal-card title="New Category" name="newModal">
+    <x-wui-modal-card title="New Sub Category" name="newModal">
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div class="col-span-1 sm:col-span-2">
                 <x-wui-select wire:model='category_id' label="Main Group" placeholder="search" :async-data="route('api.category')"
@@ -88,6 +91,34 @@
                 @else
                     <x-wui-button primary label="Save" wire:click="createCategory" />
                 @endif
+            </div>
+        </x-slot>
+    </x-wui-modal-card>
+
+    {{-- Edit modal  --}}
+    <x-wui-modal-card title="Edit Sub Category" name="editModal">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div class="col-span-1 sm:col-span-2">
+                <x-wui-select wire:model='up_category_id' label="Main Group" placeholder="search" :async-data="route('api.category')"
+                    option-label="category" option-value="id" />
+            </div>
+            <x-wui-input label="Name" wire:model='up_name' placeholder="eg. Cover" />
+
+            <x-wui-input label="Code" wire:model='up_code' placeholder=" eg. C" />
+
+            <div class="col-span-1 sm:col-span-2">
+                <x-wui-input label="Description" wire:model='up_description' placeholder="description" />
+            </div>
+
+
+        </div>
+
+        <x-slot name="footer" class="flex justify-between gap-x-4">
+            <x-wui-button flat negative label="Delete" x-on:click="$closeModal('editModal')" />
+
+            <div class="flex gap-x-4">
+                <x-wui-button flat label="Cancel" x-on:click="close" wire:click='clearEditId' />
+                <x-wui-button primary label="Update" wire:click="update" />
             </div>
         </x-slot>
     </x-wui-modal-card>

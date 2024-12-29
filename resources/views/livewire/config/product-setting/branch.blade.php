@@ -5,14 +5,11 @@
                 {{ __('New Shop') }}
             </h2>
             <x-wui-button label="New" @click="$openModal('newModal')" />
-            @if ($edit_id)
-                <x-wui-button label="Cancle edit" wire:click='cancleEdit' negative />
-            @endif
         </div>
 
 
 
-        <div class="px-12 mt-2 overflow-x-auto">
+        <div class="px-12 mx-auto mt-2 overflow-x-auto sm:w-full md:w-3/4">
             <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
@@ -70,12 +67,29 @@
                 <x-wui-button flat negative label="Delete" x-on:click="$closeModal('newModal')" />
 
                 <div class="flex gap-x-4">
+                    <x-wui-button flat label="Cancel" x-on:click="close" />
+
+                    <x-wui-button primary label="Save" wire:click="create" />
+
+                </div>
+            </x-slot>
+        </x-wui-modal-card>
+
+        {{-- Edit modal  --}}
+        <x-wui-modal-card title="New Category" name="editModal">
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <x-wui-input label="Name" wire:model='up_name' placeholder="eg. Humburger" />
+
+                <x-wui-input label="Address" wire:model='up_address' placeholder=" eg . Hlaetan.Yangon" />
+
+            </div>
+
+            <x-slot name="footer" class="flex justify-between gap-x-4">
+                <x-wui-button flat negative label="Delete" x-on:click="$closeModal('editModal')" />
+
+                <div class="flex gap-x-4">
                     <x-wui-button flat label="Cancel" x-on:click="close" wire:click='cancleEdit' />
-                    @if ($edit_id)
-                        <x-wui-button primary label="Update" wire:click="update" />
-                    @else
-                        <x-wui-button primary label="Save" wire:click="create" />
-                    @endif
+                    <x-wui-button primary label="Update" wire:click="update" />
                 </div>
             </x-slot>
         </x-wui-modal-card>
@@ -84,11 +98,11 @@
             <form wire:submit="delete" class="p-6">
 
                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                    {{ __('Are you sure you want to delete Sub Category?') }}
+                    {{ __('Are you sure you want to delete Branch?') }}
                 </h2>
 
                 <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    {{ __('Once your category is deleted, all of its porducts and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete this category.') }}
+                    {{ __('Once your branch is deleted, all of its porducts and data will be permanently deleted.') }}
                 </p>
 
                 <div class="flex justify-end mt-6">
@@ -97,7 +111,7 @@
                     </x-secondary-button>
 
                     <x-danger-button class="ms-3">
-                        {{ __('Delete Sub-category') }}
+                        {{ __('Delete Branch') }}
                     </x-danger-button>
                 </div>
             </form>

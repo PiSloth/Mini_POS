@@ -18,6 +18,11 @@ class SubCategory extends Component
     public $editId;
     public $deleteId;
 
+    public $up_name;
+    public $up_code;
+    public $up_description;
+    public $up_category_id;
+
     public function boot()
     {
         // $this->dialog()->show([
@@ -49,37 +54,42 @@ class SubCategory extends Component
 
         $this->editId = $id;
 
-        $this->category_id = $query->category_id;
-        $this->name = $query->name;
-        $this->code = $query->code;
-        $this->description = $query->description;
+        $this->up_category_id = $query->category_id;
+        $this->up_name = $query->name;
+        $this->up_code = $query->code;
+        $this->up_description = $query->description;
 
-        $this->dispatch('openModal', 'newModal');
+        $this->dispatch('openModal', 'editModal');
     }
 
     //update sub category
     public function update()
     {
         $validated = $this->validate([
-            'name' => 'required',
-            'code' => 'required',
-            'category_id' => 'required',
-            'description' => 'nullable'
+            'up_name' => 'required',
+            'up_code' => 'required',
+            'up_category_id' => 'required',
+            'up_description' => 'nullable'
         ]);
 
         $query = ModelsSubCategory::findOrFail($this->editId);
 
-        $query->update($validated);
+        $query->update([
+            'name' => $this->up_name,
+            'code' => $this->up_code,
+            'category_id' => $this->up_category_id,
+            'description' => $this->up_description
+        ]);
 
-        $this->reset('name', 'code', 'description', 'category_id', 'editId');
-        $this->dispatch('closeModal', 'newModal');
+        $this->reset('up_name', 'code', 'up_description', 'up_category_id', 'editId');
+        $this->dispatch('closeModal', 'editModal');
     }
 
 
     //clear edit  category id
     public function clearEditId()
     {
-        $this->reset('name', 'code', 'description', 'category_id', 'editId');
+        $this->reset('up_name', 'up_code', 'up_description', 'up_category_id', 'editId');
         // $this->reset('editId');
     }
 

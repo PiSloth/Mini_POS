@@ -52,6 +52,10 @@ class Product extends Component
     public function create()
     {
         // dd("Hello");
+        $this->validate([
+            'branch_id' => 'required',
+            'price' => 'required',
+        ]);
         $validateProduct = $this->validate([
             'sub_category_id' => 'required',
             'name' => 'required',
@@ -60,13 +64,9 @@ class Product extends Component
         ]);
 
         $this->validate([
-            'branch_id' => 'required',
-            'price' => 'required',
-        ]);
-
-        $this->validate([
             'product_image' => 'required|sometimes|nullable',
         ]);
+
 
         // ---- Use Try Catch -----
 

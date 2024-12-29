@@ -21,6 +21,9 @@
                     <th scope="col" class="px-6 py-3">
                         Description
                     </th>
+                    <th scope="col" class="px-6 py-3 sr-only">
+                        Action
+                    </th>
 
                 </tr>
             </thead>
@@ -82,7 +85,7 @@
     </x-wui-modal-card>
 
     {{-- Edit modal  --}}
-    <x-wui-modal-card title="New Category" name="editModal">
+    <x-wui-modal-card title="Edit Category" name="editModal">
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <x-wui-input label="Name" wire:model='up_name' placeholder="eg. Cover" />
 
@@ -122,7 +125,7 @@
                 </x-secondary-button>
 
                 <x-danger-button class="ms-3">
-                    {{ __('Delete Sub-category') }}
+                    {{ __('Delete Category') }}
                 </x-danger-button>
             </div>
         </form>

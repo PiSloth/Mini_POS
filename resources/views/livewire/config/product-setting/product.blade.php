@@ -4,9 +4,6 @@
             {{ __('Product') }}
         </h2>
         <x-wui-button label="New" @click="$openModal('newModal')" />
-        @if ($edit_id)
-            <x-wui-button label="Cancle edit" wire:click='clearEditId' negative />
-        @endif
     </div>
 
     <div class="px-12 mt-2 overflow-x-auto">
@@ -106,6 +103,9 @@
                         <option value="{{ $branch->id }}">{{ $branch->name }}</option>
                     @endforeach
                 </select>
+                @error('branch_id')
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
 
                 <div class="col-span-1 sm:col-span-2">
                     <x-wui-select wire:model='sub_category_id' label="Main Group" placeholder="search" :async-data="route('api.sub-category')"
@@ -151,18 +151,17 @@
                         </button>
                     </div>
                 </template>
-
-
+                @error('product_image')
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
             </div>
 
             <x-slot name="footer" class="flex justify-between gap-x-4">
                 <x-wui-button flat negative label="Delete" x-on:click="$closeModal('newModal')" />
 
                 <div class="flex gap-x-4">
-                    <x-wui-button flat label="Cancel" x-on:click="close" wire:click='clearEditId' />
-
+                    <x-wui-button flat label="Cancel" x-on:click="close" />
                     <x-primary-button wire:click='create'>save</x-primary-button>
-
                 </div>
             </x-slot>
         </form>
