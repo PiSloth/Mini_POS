@@ -233,6 +233,9 @@
                             @endforeach
                         </select>
                     </div>
+                    @error('branch_id')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
                 </div>
                 <x-wui-currency label="Price" thousands="," prefix="MMK" wire:model='price' />
             </div>

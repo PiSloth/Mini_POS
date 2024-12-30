@@ -2,9 +2,11 @@
 
 namespace App\Livewire\Sale;
 
+use App\Models\Branch;
 use App\Models\BranchProduct;
 use App\Models\Customer;
 use App\Models\Invoice;
+use App\Models\InvoiceItem;
 use Carbon\Carbon;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +27,9 @@ class SaleInvoice extends Component
     public $address;
     public $customer_id;
     public $customer = [];
+    public $invoice_id;
+
+    public $branch_id;
 
     public function addToCart($key, $name, $code, $price): void
     {
@@ -47,7 +52,7 @@ class SaleInvoice extends Component
     }
 
     //create Voucher
-    public function createVoucher(): void
+    public function createVoucher()
     {
         if (count($this->cart) == 0 || count($this->customer) == 0) {
             $this->dialog()->show([
@@ -62,12 +67,24 @@ class SaleInvoice extends Component
             foreach ($this->cart as $item) {
                 $total += $item['price'];
             }
-            Invoice::create([
-                'number' => Carbon::now()->format('mjyHi'),
+            $invoice = Invoice::create([
+                'number' => "PV/" . Carbon::now()->format('mjyHi'),
                 'customer_id' => $this->customer_id,
                 'invoice_status_id' => 1, //new
                 'total' => $total,
             ]);
+
+            $this->invoice_id = $invoice->id;
+
+            foreach ($this->cart as $item) {
+                InvoiceItem::create([
+                    'invoice_id' => $invoice->id,
+                    'branch_product_id' => $item['key'],
+                    'quantity' => $item['quantity'],
+                    'price' => $item['price'],
+                    'total' => $item['price'] * $item['quantity'],
+                ]);
+            }
         });
 
         $this->reset('cart', 'customer');
@@ -76,6 +93,8 @@ class SaleInvoice extends Component
             'title' => 'Created',
             'description' => "Voucher was successfully created."
         ]);
+
+        return $this->redirectRoute('invoice-detail', ['view-detail' => $this->invoice_id], navigate: true);
     }
 
     public function createCustomer(): void
@@ -132,7 +151,7 @@ class SaleInvoice extends Component
             ->leftJoin('sub_categories', 'sub_categories.id', 'products.sub_category_id')
             ->leftJoin('categories', 'categories.id', 'sub_categories.category_id')
             ->orderBy('categories.code')
-            ->where('branch_products.branch_id', '=', 1)
+            ->where('branch_products.branch_id', '=', $this->branch_id)
             ->when(
                 $this->search,
                 fn(Builder $query) => $query->where(function ($query) {
@@ -154,6 +173,7 @@ class SaleInvoice extends Component
 
         return view('livewire.sale.sale-invoice', [
             'products' => $products,
+            'branches' => Branch::all(),
         ]);
     }
 }

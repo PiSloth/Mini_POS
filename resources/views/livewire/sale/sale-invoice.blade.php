@@ -3,6 +3,15 @@
         <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
             {{ __('New Invoice') }}
         </h2>
+        <div class="text-sm">
+            <select wire:model.live='branch_id' required id="branch_name"
+                class="text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option value="" disabled>Shop</option>
+                @foreach ($branches as $branch)
+                    <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                @endforeach
+            </select>
+        </div>
     </div>
 
     <div class="grid grid-cols-1 gap-4 p-4 md:grid-cols-2">
@@ -53,6 +62,7 @@
             </table>
             <div>{{ $products->links() }}</div>
         </div>
+
         <div class="p-4 border-2 border-teal-100 rounded-lg">
             <center>
                 <x-application-logo class="block w-auto text-gray-800 fill-current h-9 dark:text-gray-200" />
@@ -137,24 +147,6 @@
 
 
         {{-- New modal  --}}
-        <x-wui-modal-card title="ရှိပြီးသား Customer ရွေးပါ" name="">
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <x-wui-select wire:model='customer_id' label="Main Group" placeholder="eg ,Kyan Sit Thar"
-                    :async-data="route('api.contact')" option-label="name" option-value="id" />
-            </div>
-
-            <x-slot name="footer" class="flex justify-between gap-x-4">
-                <x-wui-button flat positive label="အသစ်လုပ်မယ်" x-on:click="$openModal('createCustomerModal')" />
-
-                <div class="flex gap-x-4">
-                    <x-wui-button flat label="Cancel" x-on:click="close" />
-
-                    <x-wui-button primary label="Save" wire:click="setCustomer" />
-                </div>
-            </x-slot>
-        </x-wui-modal-card>
-
-        {{-- New modal  --}}
         <x-wui-modal-card title="Choose a Customer" name="newModal">
             <div class="p-4 my-4 border rounded-lg border-teal-950">
                 <span class="text-lg text-gray-500 ">ရှာဖွေရန်</span>
@@ -191,5 +183,8 @@
 <script>
     Livewire.on('closeModal', (name) => {
         $closeModal(name);
+    });
+    Livewire.on('openModal', (name) => {
+        $openModal(name);
     });
 </script>

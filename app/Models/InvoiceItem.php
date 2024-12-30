@@ -10,4 +10,9 @@ class InvoiceItem extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function branchProduct()
+    {
+        return $this->belongsTo(BranchProduct::class);
+    }
 }

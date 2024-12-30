@@ -19,4 +19,9 @@ class Invoice extends Model
     {
         return $this->belongsTo(Customer::class);
     }
+
+    // public function invoiceStatus()
+    // {
+    //     return $this->belongsTo(InvoiceStatus::class);
+    // }
 }

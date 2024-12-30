@@ -24,6 +24,9 @@ class DatabaseSeeder extends Seeder
             'name' => 'New'
         ]);
         DB::table('invoice_statuses')->insert([
+            'name' => 'Confirm'
+        ]);
+        DB::table('invoice_statuses')->insert([
             'name' => 'COD'
         ]);
         DB::table('invoice_statuses')->insert([

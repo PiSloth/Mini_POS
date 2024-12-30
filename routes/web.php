@@ -8,6 +8,7 @@ use App\Livewire\Config\ProductSetting\SubCategory;
 use App\Livewire\Crm\Contact;
 use App\Livewire\Inventory\Balance;
 use App\Livewire\Sale\DailyInvoice;
+use App\Livewire\Sale\InvoiceDetail;
 use App\Livewire\Sale\SaleInvoice;
 use App\Models\BranchProductLocation;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +41,7 @@ Route::middleware(['auth'])->prefix('inventory')->group(function () {
 Route::middleware(['auth'])->prefix('sale')->group(function () {
     Route::get('/invoice', SaleInvoice::class)->name('invoice');
     Route::get('/daily-invoice', DailyInvoice::class)->name('daily-invoice');
+    Route::get('/invoice-detail', InvoiceDetail::class)->name('invoice-detail');
 });
 
 Route::middleware(['auth'])->prefix('crm')->group(function () {

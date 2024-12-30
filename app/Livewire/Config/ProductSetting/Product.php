@@ -130,11 +130,6 @@ class Product extends Component
         ]);
 
         // $this->validate([
-        //     'up_branch_id' => 'required',
-        //     'up_price' => 'required',
-        // ]);
-
-        // $this->validate([
         //     'up_product_image' => 'required|sometimes|nullable',
         // ]);
 
