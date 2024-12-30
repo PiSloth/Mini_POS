@@ -57,6 +57,7 @@
 
             </tbody>
         </table>
+        <div class="p-4">{{ $categories->links() }}</div>
     </div>
 
     {{-- New modal  --}}

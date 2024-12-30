@@ -5,11 +5,13 @@ namespace App\Livewire\Config\ProductSetting;
 use App\Models\Category as ModelsCategory;
 use Exception;
 use Livewire\Component;
+use Livewire\WithPagination;
 use WireUi\Traits\WireUiActions;
 
 class Category extends Component
 {
     use WireUiActions;
+    use WithPagination;
     public $name;
     public $code;
     public $description;
@@ -110,7 +112,7 @@ class Category extends Component
 
     public function render()
     {
-        $categories = ModelsCategory::all();
+        $categories = ModelsCategory::paginate(10);
 
         return view('livewire.config.product-setting.category', [
             'categories' => $categories,

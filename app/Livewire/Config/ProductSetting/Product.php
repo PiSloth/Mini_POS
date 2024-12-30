@@ -8,13 +8,18 @@ use App\Models\Price;
 use App\Models\Product as ModelsProduct;
 use App\Models\ProductImage;
 use App\Models\ProductPrice;
+use Exception;
 use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
+use Livewire\WithPagination;
 use WireUi\Traits\WireUiActions;
 
 class Product extends Component
 {
+
+    use WithPagination;
     use WithFileUploads;
     use WireUiActions;
     public $branch_id = '';
@@ -105,6 +110,8 @@ class Product extends Component
 
         $edit_item = ModelsProduct::find($id);
 
+        // dd($edit_item);
+
         // $this->up_branch_id = $edit_item->branch_id;
         // $this->up_price = $edit_item->price;
         $this->up_sub_category_id = $edit_item->sub_category_id;
@@ -122,11 +129,11 @@ class Product extends Component
     {
         // dd($this->up_product_image);
 
-        $validateProduct = $this->validate([
+        $this->validate([
             'up_sub_category_id' => 'required',
             'up_name' => 'required',
             'up_code' => 'required',
-            'up_description' => 'nullable',
+            'up_description' => 'sometimes|nullable',
         ]);
 
         // $this->validate([
@@ -134,27 +141,22 @@ class Product extends Component
         // ]);
 
         // ---- Use Try Catch -----
+        try {
+            DB::transaction(function () {
+                $pId = $this->edit_id;
+                // $bpId = $this->edit_id;
+                // $imgId = $this->up_product_image_id;
+                ModelsProduct::where('id', $pId)->update([
+                    'sub_category_id' => $this->up_sub_category_id,
+                    'name' => $this->up_name,
+                    'code' => $this->up_code,
+                    'description' => $this->up_description,
+                ]);
+            });
+        } catch (Exception $e) {
+            dd($e);
+        }
 
-        DB::transaction(function () {
-
-            $pId = $this->up_product_id;
-            $bpId = $this->edit_id;
-            $imgId = $this->up_product_image_id;
-
-            ModelsProduct::where('id', $pId)->update([
-                'sub_category_id' => $this->up_sub_category_id,
-                'name' => $this->up_name,
-                'code' => $this->up_code,
-                'description' => $this->up_description,
-            ]);
-
-            // BranchProduct::where('id', $bpId)->update([
-            //     'price' => $this->up_price,
-            // ]);
-            // ProductImage::whereProductId($imgId)->update([
-            //     'image' => $this->up_product_image,
-            // ]);
-        });
 
         $this->dispatch('closeModal', 'editModal');
 
@@ -219,9 +221,13 @@ class Product extends Component
         ]);
     }
 
+
+    #[Title('all available products in our company')]
+
+
     public function render()
     {
-        $products = ModelsProduct::all();
+        $products = ModelsProduct::paginate(10);
 
         return view('livewire.config.product-setting.product', [
             'products' => $products,

@@ -8,12 +8,15 @@ use App\Models\BranchProductLocation;
 use App\Models\Customer;
 use App\Models\StockAdjustmentTemp;
 use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\WithPagination;
 use WireUi\Traits\WireUiActions;
 
 class Balance extends Component
 {
     use WireUiActions;
+    use WithPagination;
     public $branch_product_id;
     public $remark;
     public $quantity;
@@ -122,12 +125,12 @@ class Balance extends Component
         ]);
     }
 
-
+    #[Title('main stock in our inventory')]
 
     public function render()
     {
         $branch_products = BranchProduct::where('branch_id', $this->branch_id)
-            ->get();
+            ->paginate(10);
 
         return view('livewire.inventory.balance', [
             'stocks' => $branch_products,

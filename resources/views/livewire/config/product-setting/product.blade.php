@@ -63,9 +63,9 @@
                         <td>There's no records</td>
                     </tr>
                 @endforelse
-
             </tbody>
         </table>
+        <div class="p-4">{{ $products->links() }}</div>
     </div>
 
     {{-- New modal  --}}

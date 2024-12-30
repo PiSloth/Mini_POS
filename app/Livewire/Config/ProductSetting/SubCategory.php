@@ -6,11 +6,13 @@ use App\Models\Category;
 use App\Models\SubCategory as ModelsSubCategory;
 use Exception;
 use Livewire\Component;
+use Livewire\WithPagination;
 use WireUi\Traits\WireUiActions;
 
 class SubCategory extends Component
 {
     use WireUiActions;
+    use WithPagination;
     public $name;
     public $code;
     public $description;
@@ -133,7 +135,7 @@ class SubCategory extends Component
     public function render()
     {
         $mainCategories = Category::all();
-        $categories = ModelsSubCategory::with('category')->get();
+        $categories = ModelsSubCategory::with('category')->paginate(10);
 
         return view('livewire.config.product-setting.sub-category', [
             'categories' => $categories,

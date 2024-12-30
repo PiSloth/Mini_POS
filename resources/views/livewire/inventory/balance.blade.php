@@ -76,6 +76,8 @@
         </tbody>
     </table>
 
+    <div class="p-4">{{ $stocks->links() }}</div>
+
     {{-- item location creation modal  --}}
     <x-wui-modal-card title="Item Location Define/ ပစ္စည်းများ အသေးစိတ် နေရာ သတ်မှတ်ပါ" name="itemLocationModal">
         <div class="col-span-1 mb-3 sm:col-span-2">
@@ -148,7 +150,7 @@
                                 {{ $item->quantity }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $item->quantity ? 'အဝင်' : 'အထွက်' }}
+                                {{ $item->is_stock_in ? 'အဝင်' : 'အထွက်' }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ $item->user->name }}
