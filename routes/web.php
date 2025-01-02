@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Config\Accounting\PaymentMethod;
 use App\Livewire\Config\ProductLocation;
 use App\Livewire\Config\ProductSetting\Branch;
 use App\Livewire\Config\ProductSetting\Category;
@@ -32,6 +33,7 @@ Route::middleware(['auth'])->prefix('config')->group(function () {
     Route::get('/sub-category', SubCategory::class)->name('sub-category');
     Route::get('/product', Product::class)->name('product');
     Route::get('/item-location', ProductLocation::class)->name('item-location');
+    Route::get('/payment-method', PaymentMethod::class)->name('payment-method');
 });
 
 Route::middleware(['auth'])->prefix('inventory')->group(function () {

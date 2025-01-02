@@ -79,6 +79,13 @@ $logout = function (Logout $logout) {
                                         {{ __('Item Location') }}
                                     </x-dropdown-link>
                                 </button>
+
+                                {{-- Payment methods in accounting --}}
+                                <button class="w-full text-start">
+                                    <x-dropdown-link :href="route('payment-method')" wire:navigate>
+                                        {{ __('Payment Methods') }}
+                                    </x-dropdown-link>
+                                </button>
                             </x-slot>
                         </x-dropdown>
                     </div>
@@ -267,6 +274,10 @@ $logout = function (Logout $logout) {
 
                 <x-responsive-nav-link :href="route('item-location')" wire:navigate>
                     {{ __('Item Location') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('payment-method')" wire:navigate>
+                    {{ __('Payment Methods') }}
                 </x-responsive-nav-link>
 
             </div>

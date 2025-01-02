@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Config\CategoryController;
 use App\Http\Controllers\Api\Config\ItemLocationController;
+use App\Http\Controllers\Api\Config\PaymentMethodController;
 use App\Http\Controllers\Api\Config\ProductController;
 use App\Http\Controllers\Api\Config\SubCategoryController;
 use App\Http\Controllers\Api\Crm\ContactController;
@@ -30,4 +31,5 @@ Route::middleware([])->group(function () {
     Route::get('products', ProductController::class)->name('api.product');
     Route::get('contacts', ContactController::class)->name('api.contact');
     Route::get('location', ItemLocationController::class)->name('api.item-location');
+    Route::get('payments', PaymentMethodController::class)->name('api.payment-methods');
 });

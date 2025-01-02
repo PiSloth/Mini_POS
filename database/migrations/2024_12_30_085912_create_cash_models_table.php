@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('cash_models', function (Blueprint $table) {
             $table->id();
-            $table->string('account')->unique();
+            $table->string('account')->unique(); //Cash account/ Aya account/ Kbz account
             $table->string('description')->nullable();
             $table->timestamps();
         });

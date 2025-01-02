@@ -60,7 +60,7 @@
                     @endforelse
                 </tbody>
             </table>
-            <div>{{ $products->links() }}</div>
+            {{-- <div>{{ $products->links() }}</div> --}}
         </div>
 
         <div class="p-4 border-2 border-teal-100 rounded-lg">

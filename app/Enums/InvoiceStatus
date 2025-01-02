@@ -1,0 +1,10 @@
+<?php
+
+namespace App\Enums;
+
+enum Status: string
+{
+    case NEW = 1;
+    case CONFIRM = 2;
+    case CANCLE = 3;
+}

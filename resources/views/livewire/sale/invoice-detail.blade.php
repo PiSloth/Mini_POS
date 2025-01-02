@@ -6,9 +6,9 @@
         @if ($status == 'new')
             <x-primary-button @click="$openModal('paymentModal')">confirm</x-primary-button>
         @endif
-        {{-- @if ($status == 'confirmed')
-            <x-primary-button payment</x-primary-button>
-        @endif --}}
+        @if ($payment_button == true)
+            <x-primary-button @click="$openModal('paymentAgainModal')">Payment</x-primary-button>
+        @endif
     </div>
     <div class="p-2">
         <div class="p-4 border-2 border-teal-100 rounded-lg">
@@ -58,7 +58,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($items as $id => $item)
+                    @forelse ($items as $item)
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <th scope="row"
                                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -89,21 +89,80 @@
             </table>
         </div>
     </div>
+    <div class="flex mr-10 justify-self-end">
+        <table class="border border-gray-100">
+            <thead>
+                <tr class="border-2 border-gray-2">
+                    <th class="px-6 py-4">Desc</th>
+                    <th class="px-6 py-4 sr-only">Desc</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr class="border-2 border-gray-2">
+                    <td class="px-6 py-2"> {{ 'Total' }} </td>
+                    <td class="px-6 py-2">{{ number_format($invoice_info->total) }}</td>
+                </tr>
+
+                <tr class="border-2 border-gray-2">
+                    <td class="px-6 py-2"> {{ 'Paid' }} </td>
+                    <td class="px-6 py-2">{{ number_format($invoice_info->paid_amount) }}</td>
+                </tr>
+
+                @php
+                    $outstanding = $invoice_info->total - $invoice_info->paid_amount;
+                @endphp
+                <tr class="border-2 border-gray-2">
+                    <td class="px-6 py-2"> {{ 'Outstanding Amount' }} </td>
+                    <td class="px-6 py-2">{{ number_format($outstanding) }}</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
 
     {{-- Payment modal  --}}
     <x-wui-modal-card title="Payemnt Terms ရွေးချယ်ပါ" name="paymentModal">
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <x-wui-select wire:model='customer_id' label="Main Group" placeholder="eg ,Kyan Sit Thar" :async-data="route('api.contact')"
-                option-label="name" option-value="id" />
+            <x-wui-select wire:model='payment_method' label="Payment Option" placeholder="eg ,NexGen Pay"
+                :async-data="route('api.payment-methods')" option-label="name" option-value="id" />
+        </div>
+        <div class="grid grid-cols-1 gap-4 mt-3 sm:grid-cols-2">
+            <x-wui-currency thousands="," prefix="MMK" label="Amount" wire:model='paid_amount'
+                placeholder=" eg. 1500" />
+            {{-- <x-wui-date label="phone" wire:model='payment_date' /> --}}
         </div>
 
         <x-slot name="footer" class="flex justify-between gap-x-4">
-            <x-wui-button flat negative label="Delete" x-on:click="$closeModal('paymentModal')" />
+            <x-wui-button flat negative label="COD" wire:click='codPayment' />
 
             <div class="flex gap-x-4">
                 <x-wui-button flat label="Cancel" x-on:click="close" />
 
-                <x-wui-button primary label="Save" />
+                <x-wui-button primary label="Save" wire:click='confirmAndPayment' />
+            </div>
+        </x-slot>
+    </x-wui-modal-card>
+
+    {{-- Make payment again --}}
+    <x-wui-modal-card title="Payemnt Terms ရွေးချယ်ပါ" name="paymentAgainModal">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <x-wui-select wire:model='payment_method' label="Payment Option" placeholder="eg ,NexGen Pay"
+                :async-data="route('api.payment-methods')" option-label="name" option-value="id" />
+        </div>
+        <div class="grid grid-cols-1 gap-4 mt-3 sm:grid-cols-2">
+            <x-wui-currency label="Amount" prefix="MMK" thousands="," wire:model='paid_amount'
+                placeholder="ကျန်ငွေ  {{ number_format($outstanding) }}" />
+            {{-- <x-wui-date label="phone" wire:model='payment_date' /> --}}
+        </div>
+
+        <x-slot name="footer" class="flex justify-between gap-x-4">
+            <x-wui-button flat negative label="delete" x-on:click="close" />
+
+            <div class="flex gap-x-4">
+                <x-wui-button flat label="Cancel" x-on:click="close" />
+
+                <x-wui-button primary label="Save" wire:click='createPayment' />
             </div>
         </x-slot>
     </x-wui-modal-card>

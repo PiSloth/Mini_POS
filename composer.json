@@ -12,6 +12,7 @@
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^3.4",
         "livewire/volt": "^1.0",
+        "spatie/simple-excel": "^3.7",
         "wireui/wireui": "^2.2"
     },
     "require-dev": {

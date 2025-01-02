@@ -15,25 +15,33 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Admin',
-        //     'email' => 'admin@nexgen.com',
-        // ]);
+        \App\Models\User::factory()->create([
+            'name' => 'Admin',
+            'email' => 'admin@nexgen.com',
+        ]);
 
-        DB::table('invoice_statuses')->insert([
-            'name' => 'New'
-        ]);
-        DB::table('invoice_statuses')->insert([
-            'name' => 'Confirm'
-        ]);
-        DB::table('invoice_statuses')->insert([
-            'name' => 'COD'
-        ]);
-        DB::table('invoice_statuses')->insert([
-            'name' => 'Paid'
-        ]);
-        DB::table('invoice_statuses')->insert([
-            'name' => 'Canceled'
-        ]);
+        // $invoiceStatus = [
+        //     'new',
+        //     'confirmed',
+        //     'cancled'
+        // ];
+
+        // $paymentMethod = [
+        //     'cash',
+        //     'cod',
+        //     'AYA 1060',
+        //     'KBZ 340'
+        // ];
+        // foreach ($invoiceStatus as $item) {
+        //     DB::table('invoice_statuses')->insert([
+        //         'name' => $item
+        //     ]);
+        // }
+
+        // foreach ($paymentMethod as $item) {
+        //     DB::table('payment_methods')->insert([
+        //         'name' => $item,
+        //     ]);
+        // }
     }
 }

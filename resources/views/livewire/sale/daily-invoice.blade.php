@@ -1,8 +1,10 @@
 <div>
-    <div class="flex h-16 gap-2 p-3 mb-2 bg-white dark:text-white">
+    <div class="flex h-12 gap-2 p-3 mb-2 bg-white dark:text-white">
         <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
             {{ __('Sale Invoices') }}
         </h2>
+        <x-primary-button wire:click='exportData'>Export</x-primary-button>
+
     </div>
 
     <table class="w-full mt-3 text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
@@ -41,10 +43,21 @@
                         {{ $item->customer->name }}
                     </td>
                     <td class="px-6 py-4">
-                        {{ $item->total }}
+                        {{ number_format($item->total) }}
                     </td>
+
                     <td class="px-6 py-4">
                         <x-wui-badge secondary>{{ $item->invoiceStatus->name }}</x-wui-badge>
+
+                        @if ($item->payment_status == 'unpaid')
+                            <x-wui-badge negative>{{ $item->payment_status }}</x-wui-badge>
+                        @endif
+                        @if ($item->payment_status == 'paid')
+                            <x-wui-badge positive>{{ $item->payment_status }}</x-wui-badge>
+                        @endif
+                        @if ($item->payment_status == 'partial')
+                            <x-wui-badge warning>{{ $item->payment_status }}</x-wui-badge>
+                        @endif
                     </td>
                 </tr>
 

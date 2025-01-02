@@ -10,6 +10,7 @@ use App\Models\InvoiceItem;
 use Carbon\Carbon;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
 use WireUi\Traits\WireUiActions;
@@ -29,7 +30,7 @@ class SaleInvoice extends Component
     public $customer = [];
     public $invoice_id;
 
-    public $branch_id;
+    public $branch_id = 1;
 
     public function addToCart($key, $name, $code, $price): void
     {
@@ -62,11 +63,14 @@ class SaleInvoice extends Component
             ]);
             return;
         }
-        DB::transaction(function () {
-            $total = 0;
-            foreach ($this->cart as $item) {
-                $total += $item['price'];
-            }
+
+        $total = 0;
+        foreach ($this->cart as $item) {
+            $total += $item['price'];
+        }
+
+        DB::transaction(function () use ($total) {
+
             $invoice = Invoice::create([
                 'number' => "PV/" . Carbon::now()->format('mjyHi'),
                 'customer_id' => $this->customer_id,
@@ -74,6 +78,7 @@ class SaleInvoice extends Component
                 'total' => $total,
             ]);
 
+            //set id for navigate
             $this->invoice_id = $invoice->id;
 
             foreach ($this->cart as $item) {
@@ -118,13 +123,13 @@ class SaleInvoice extends Component
         } else {
             $validated = $this->validate([
                 'name' => 'required',
-                'phone' => 'numeric|required',
+                'phone' => 'required',
                 'address' => 'nullable|string',
             ]);
 
             $createdCustomer = Customer::create($validated);
 
-            $this->customer_id = $createdCustomer;
+            $this->customer_id = $createdCustomer->id;
 
             $this->notification()->send([
                 'icon' => 'success',
@@ -142,6 +147,8 @@ class SaleInvoice extends Component
 
         $this->dispatch('closeModal', 'newModal');
     }
+
+    #[Title('Create an invoice')]
 
     public function render()
     {
@@ -163,6 +170,10 @@ class SaleInvoice extends Component
 
             )
             ->paginate(4);
+        // ->get();
+        // dd($products);
+
+        // dd(BranchProduct::all());
 
         // dd(Carbon::now()->format('mjyHi'));
         // if ($this->customer) {
