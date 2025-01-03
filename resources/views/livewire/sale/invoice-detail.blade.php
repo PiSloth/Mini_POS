@@ -8,118 +8,89 @@
         @endif
         @if ($payment_button == true)
             <x-primary-button @click="$openModal('paymentAgainModal')">Payment</x-primary-button>
+            <a href="/generate/{{ $invoice_id }}">
+                <x-primary-button>Print</x-primary-button>
+            </a>
         @endif
     </div>
-    <div class="p-2">
-        <div class="p-4 border-2 border-teal-100 rounded-lg">
-            <center>
-                <x-application-logo class="block w-auto text-gray-800 fill-current h-9 dark:text-gray-200" />
-                ငွေရပြေစာ
-            </center>
-            <table>
-                <thead>
-                    <tr>
-                        <th class="px-6 py-4">Customer</th>
-                        <th class="px-6 py-4 sr-only">Desc</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($customer_info as $info)
-                        <tr>
-                            <td class="px-6 py-2">{{ $info['type'] }}</td>
-                            <td class="px-6 py-2">{{ $info['detail'] }}</td>
-                        </tr>
+    {{-- voucher template --}}
+    <div class="w-1/2 mx-auto mt-4">
+        <div class="w-[5.8in] h-[8.3in] bg-white shadow-lg p-6">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    @foreach ($branch_info as $name => $item)
+                        <h1 class="text-xl font-bold">{{ $name }}</h1>
+                        <p class="text-sm">{{ $item['address'] }}</p>
+                        <p class="text-sm">Phone: +123-456-7890</p>
                     @endforeach
-                </tbody>
-            </table>
+                </div>
+                <div>
+                    <x-application-logo class="block w-auto text-gray-800 fill-current h-9 dark:text-gray-200" />
+                </div>
+            </div>
 
-            <table class="w-full mt-3 text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-6 py-3">
-                            Name
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Code
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Qty
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Price
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Total
-                        </th>
-                        <th scope="col" class="px-6 py-3 sr-only">
-                            Action
-                        </th>
+            <!-- Customer Information -->
+            <div class="mb-6">
 
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($items as $item)
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {{ $item->branchProduct->product->name }}
-                            </th>
-                            <td class="px-6 py-4">
-                                {{ $item->branchProduct->product->code }}
-                            </td>
-                            <td class="px-6 py-4">
-                                {{ $item->quantity }}
-                            </td>
-                            <td class="px-6 py-4">
-                                {{ $item->price }}
-                            </td>
-                            <td class="px-6 py-4">
-                                {{ $item->total }}
-                            </td>
-                            <td class="px-6 py-4">
+                <h2 class="mb-2 text-lg font-bold">Invoice To:</h2>
+                @foreach ($customer_info as $info)
+                    <p class="text-sm">{{ $info['detail'] }}</p>
+                @endforeach
+            </div>
 
-                            </td>
+            <!-- Invoice Items -->
+            <div class="mb-6">
+                <table class="w-full border border-collapse border-gray-300">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-4 py-2 text-sm text-left border border-gray-300">Item Name</th>
+                            <th class="px-4 py-2 text-sm text-right border border-gray-300">Quantity</th>
+                            <th class="px-4 py-2 text-sm text-right border border-gray-300">Total</th>
                         </tr>
-                    @empty
-                        <tr class="py-4">
-                            <td>There's no records yet!</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach ($items as $item)
+                            <tr>
+                                <td class="px-4 py-2 text-sm border border-gray-300">
+                                    {{ $item->branchProduct->product->name }}</td>
+                                <td class="px-4 py-2 text-sm text-right border border-gray-300">
+                                    {{ $item->price }} x {{ $item->quantity }}</td>
+                                <td class="px-4 py-2 text-sm text-right border border-gray-300">{{ $item->total }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            @php
+                $outstanding = $invoice_info->total - $invoice_info->paid_amount;
+            @endphp
+
+
+            <!-- Totals -->
+            <div class="mb-6 text-right">
+                <div class="flex justify-between text-sm">
+                    <span>Paid Amount:</span>
+                    <span>{{ $invoice_info->paid_amount }}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span>Outstanding Amount:</span>
+                    <span>{{ number_format($outstanding) }}</span>
+                </div>
+                <div class="flex justify-between text-lg font-bold">
+                    <span>Total Amount:</span>
+                    <span>{{ number_format($invoice_info->total) }}</span>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="mt-12 text-center">
+                <p class="text-sm text-gray-600">Thank you for choosing us!</p>
+            </div>
         </div>
     </div>
-    <div class="flex mr-10 justify-self-end">
-        <table class="border border-gray-100">
-            <thead>
-                <tr class="border-2 border-gray-2">
-                    <th class="px-6 py-4">Desc</th>
-                    <th class="px-6 py-4 sr-only">Desc</th>
-                </tr>
-            </thead>
-            <tbody>
 
-                <tr class="border-2 border-gray-2">
-                    <td class="px-6 py-2"> {{ 'Total' }} </td>
-                    <td class="px-6 py-2">{{ number_format($invoice_info->total) }}</td>
-                </tr>
-
-                <tr class="border-2 border-gray-2">
-                    <td class="px-6 py-2"> {{ 'Paid' }} </td>
-                    <td class="px-6 py-2">{{ number_format($invoice_info->paid_amount) }}</td>
-                </tr>
-
-                @php
-                    $outstanding = $invoice_info->total - $invoice_info->paid_amount;
-                @endphp
-                <tr class="border-2 border-gray-2">
-                    <td class="px-6 py-2"> {{ 'Outstanding Amount' }} </td>
-                    <td class="px-6 py-2">{{ number_format($outstanding) }}</td>
-                </tr>
-
-            </tbody>
-        </table>
-    </div>
 
     {{-- Payment modal  --}}
     <x-wui-modal-card title="Payemnt Terms ရွေးချယ်ပါ" name="paymentModal">
@@ -166,6 +137,9 @@
             </div>
         </x-slot>
     </x-wui-modal-card>
+
+
+
 </div>
 <script>
     Livewire.on('closeModal', (name) => {

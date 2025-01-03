@@ -20,28 +20,27 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@nexgen.com',
         ]);
 
-        // $invoiceStatus = [
-        //     'new',
-        //     'confirmed',
-        //     'cancled'
-        // ];
+        $invoiceStatus = [
+            'new',
+            'confirmed',
+            'cancled'
+        ];
 
-        // $paymentMethod = [
-        //     'cash',
-        //     'cod',
-        //     'AYA 1060',
-        //     'KBZ 340'
-        // ];
-        // foreach ($invoiceStatus as $item) {
-        //     DB::table('invoice_statuses')->insert([
-        //         'name' => $item
-        //     ]);
-        // }
+        $paymentMethod = [
+            'cash',
+            'AYA 1060',
+            'KBZ 340'
+        ];
+        foreach ($invoiceStatus as $item) {
+            DB::table('invoice_statuses')->insert([
+                'name' => $item
+            ]);
+        }
 
-        // foreach ($paymentMethod as $item) {
-        //     DB::table('payment_methods')->insert([
-        //         'name' => $item,
-        //     ]);
-        // }
+        foreach ($paymentMethod as $item) {
+            DB::table('payment_methods')->insert([
+                'name' => $item,
+            ]);
+        }
     }
 }

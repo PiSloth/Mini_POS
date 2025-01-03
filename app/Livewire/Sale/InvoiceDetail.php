@@ -27,6 +27,7 @@ class InvoiceDetail extends Component
 
     public $customer_info = [];
     public $cart_items = [];
+    public $branch_info = [];
     public $paid_amount;
     public $payment_method;
     public $payment_date;
@@ -39,6 +40,7 @@ class InvoiceDetail extends Component
 
     public function mount()
     {
+
         $invoice = Invoice::findOrFail($this->invoice_id);
         $this->customer_info = [
             ['type' => 'Name', 'detail' => $invoice->customer->name],
@@ -55,7 +57,16 @@ class InvoiceDetail extends Component
                 'id' => $item->branch_product_id,
                 'quantity' => $item->quantity,
             ];
+
+            if (!isset($this->branch_info[$item->branchProduct->branch->name])) {
+                $this->branch_info[$item->branchProduct->branch->name] = [
+                    'name' => $item->branchProduct->branch->name,
+                    'address' => $item->branchProduct->branch->address,
+                ];
+            }
         }
+
+        // dd($this->branch_info);
     }
 
 
